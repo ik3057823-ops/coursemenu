@@ -1,129 +1,283 @@
 <!DOCTYPE html>
 <html lang="uz">
 <head>
-  <meta charset="UTF-8">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Kurslar</title>
   <style>
+    :root {
+      --bg: #f7f7f9;
+      --card: #ffffff;
+      --text: #1f2937;
+      --muted: #6b7280;
+      --primary: #2563eb;
+      --border: #e5e7eb;
+      --radius: 16px;
+    }
+    * { box-sizing: border-box; }
+    html, body { height: 100%; }
     body {
-      font-family: Arial, sans-serif;
-      margin: 20px;
-      background: #f9f9f9;
-    }
-
-    .header {
-      text-align: right;
-      margin-bottom: 20px;
-    }
-
-    .header h1 {
-      font-size: 2em;
       margin: 0;
-      color: #333;
+      font-family: system-ui, -apple-system, Segoe UI, Roboto, "Helvetica Neue", Arial, "Noto Sans", "Liberation Sans", sans-serif;
+      color: var(--text);
+      background: var(--bg);
+      line-height: 1.6;
+    }
+    .container {
+      max-width: 1120px;
+      margin: 0 auto;
+      padding: 28px 20px 48px;
+    }
+    header.page-header {
+      text-align: left; /* Title on the left */
+      margin-bottom: 16px;
+    }
+    header.page-header h1 {
+      margin: 0 0 8px 0;
+      font-size: clamp(28px, 4vw, 40px);
+      letter-spacing: -0.02em;
+    }
+    .page-desc {
+      margin: 0;
+      color: var(--muted);
+      max-width: 70ch;
     }
 
+    /* Filters */
     .filters {
-      text-align: right;
-      margin-bottom: 30px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px 16px;
+      align-items: flex-end;
+      padding: 16px;
+      margin: 18px 0 24px;
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      box-shadow: 0 1px 2px rgba(0,0,0,0.04);
     }
-
+    .filters .filter-group {
+      display: grid;
+      gap: 6px;
+      min-width: 220px;
+    }
+    .filters label {
+      font-size: 0.9rem;
+      color: var(--muted);
+    }
     .filters select {
-      padding: 8px;
-      font-size: 1em;
+      appearance: none;
+      padding: 10px 12px;
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      background: #fff;
+      font-size: 0.98rem;
+    }
+    .filters .meta {
+      margin-left: auto;
+      font-size: 0.95rem;
+      color: var(--muted);
+      padding-top: 6px;
     }
 
-    .course-container {
+    /* Cards */
+    .grid {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
       gap: 20px;
     }
-
-    .course-card {
-      background: #fff;
-      border-radius: 10px;
+    .card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
       overflow: hidden;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-      transition: transform 0.2s ease;
+      box-shadow: 0 4px 14px rgba(0,0,0,0.06);
+      transition: transform 180ms ease, box-shadow 180ms ease;
+      display: flex;
+      flex-direction: column;
     }
-
-    .course-card:hover {
-      transform: scale(1.02);
-    }
-
-    .course-card img {
+    .card:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(0,0,0,0.08); }
+    .cover {
       width: 100%;
-      height: 160px;
+      aspect-ratio: 16/9;
       object-fit: cover;
+      background: #ddd;
+      display: block;
+    }
+    .card-body { padding: 16px 16px 12px; }
+    .card h3 { margin: 0 0 8px; font-size: 1.15rem; }
+    .card p { margin: 0; color: var(--muted); }
+
+    .meta-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin: 12px 0 8px;
+    }
+    .chip {
+      font-size: 0.78rem;
+      border: 1px solid var(--border);
+      background: #fafafa;
+      padding: 6px 10px;
+      border-radius: 999px;
     }
 
-    .course-content {
-      padding: 15px;
+    .card-actions {
+      display: flex;
+      justify-content: flex-end;
+      padding: 8px 16px 16px;
+      margin-top: auto;
     }
-
-    .course-title {
-      font-size: 1.2em;
-      margin: 0 0 10px;
-      color: #222;
+    .btn {
+      appearance: none;
+      border: 1px solid var(--primary);
+      background: var(--primary);
+      color: #fff;
+      padding: 10px 14px;
+      border-radius: 10px;
+      font-weight: 600;
+      text-decoration: none;
+      transition: filter 160ms ease, transform 160ms ease;
     }
+    .btn:hover { filter: brightness(1.05); transform: translateY(-1px); }
+    .btn:focus { outline: 3px solid rgba(37,99,235,0.35); outline-offset: 2px; }
 
-    .course-info {
-      font-size: 0.95em;
-      color: #555;
-      line-height: 1.5;
+    /* Empty state */
+    .empty { display:none; text-align:center; color: var(--muted); padding: 28px 12px; }
+
+    @media (prefers-reduced-motion: reduce) {
+      .card, .btn { transition: none; }
     }
   </style>
 </head>
 <body>
-  <div class="header">
-    <h1>Kurslar</h1>
+  <div class="container">
+    <!-- Header -->
+    <header class="page-header" aria-labelledby="page-title">
+      <h1 id="page-title">Kurslar</h1>
+      <p class="page-desc">
+        Bu sahifa o‘qituvchilar va o‘qitishga qiziquvchilar uchun mo‘ljallangan qisqa kurslar katalogidir.
+        Quyidagi filtrlardan foydalanib, sizga mos yo‘nalish va darajadagi kurslarni tez topishingiz mumkin.
+      </p>
+    </header>
+
+    <!-- Filters -->
+    <section class="filters" aria-label="Filterlar">
+      <div class="filter-group">
+        <label for="f-category">Yo‘nalish</label>
+        <select id="f-category" name="category" aria-label="Yo‘nalish bo‘yicha filter">
+          <option value="all">Barchasi</option>
+          <option value="til">Til o‘qitish</option>
+          <option value="pedagogika">Pedagogika</option>
+          <option value="edtech">Raqamli ta’lim (EdTech)</option>
+        </select>
+      </div>
+      <div class="filter-group">
+        <label for="f-level">Daraja</label>
+        <select id="f-level" name="level" aria-label="Daraja bo‘yicha filter">
+          <option value="all">Barchasi</option>
+          <option value="boshlangich">Boshlang‘ich</option>
+          <option value="orta">O‘rta</option>
+          <option value="ilgor">Ilg‘or</option>
+        </select>
+      </div>
+      <div class="meta" aria-live="polite"><span id="resultCount">3</span> ta kurs topildi</div>
+    </section>
+
+    <!-- Courses grid -->
+    <section class="grid" id="courseGrid" aria-label="Kurs kartalari">
+      <!-- Card 1 -->
+      <article class="card" data-category="til" data-level="orta">
+        <img class="cover" src="https://raw.githubusercontent.com/ik3057823-ops/images-5/refs/heads/main/image1.jpg" alt="Ingliz tili darsi uchun vizual tasvir" loading="lazy" />
+        <div class="card-body">
+          <h3>Ingliz tilini o‘qitish metodikasi</h3>
+          <div class="meta-row">
+            <span class="chip">Yo‘nalish: Til o‘qitish</span>
+            <span class="chip">Daraja: O‘rta</span>
+            <span class="chip">Davomiyligi: 6 hafta</span>
+          </div>
+          <p>
+            Zamonaviy yondashuvlar asosida dars rejalash, kommunikativ mashqlar, baholash mezonlari
+            va differensial yondashuvlarni o‘z ichiga olgan amaliy kurs.
+          </p>
+        </div>
+        <div class="card-actions">
+          <a class="btn" href="#" aria-label="Ingliz tilini o‘qitish metodikasi haqida batafsil">Batafsil</a>
+        </div>
+      </article>
+
+      <!-- Card 2 -->
+      <article class="card" data-category="pedagogika" data-level="boshlangich">
+        <img class="cover" src="https://raw.githubusercontent.com/ik3057823-ops/images-5/refs/heads/main/image2.jpg" alt="Pedagogik materiallar va daftarlar tasviri" loading="lazy" />
+        <div class="card-body">
+          <h3>Dars dizayni va baholash</h3>
+          <div class="meta-row">
+            <span class="chip">Yo‘nalish: Pedagogika</span>
+            <span class="chip">Daraja: Boshlang‘ich</span>
+            <span class="chip">Davomiyligi: 4 hafta</span>
+          </div>
+          <p>
+            O‘quv maqsadlarini belgilash, kompetensiyaga yo‘naltirilgan dars ssenariylari tuzish
+            va formatif/summativ baholash usullarini bosqichma-bosqich o‘rgatadi.
+          </p>
+        </div>
+        <div class="card-actions">
+          <a class="btn" href="#" aria-label="Dars dizayni va baholash haqida batafsil">Batafsil</a>
+        </div>
+      </article>
+
+      <!-- Card 3 -->
+      <article class="card" data-category="edtech" data-level="ilgor">
+        <img class="cover" src="https://raw.githubusercontent.com/ik3057823-ops/images-5/refs/heads/main/children-3708586_1280.jpg" alt="Sinfda bolalar bilan interaktiv dars tasviri" loading="lazy" />
+        <div class="card-body">
+          <h3>Raqamli ta’lim vositalari</h3>
+          <div class="meta-row">
+            <span class="chip">Yo‘nalish: Raqamli ta’lim</span>
+            <span class="chip">Daraja: Ilg‘or</span>
+            <span class="chip">Davomiyligi: 5 hafta</span>
+          </div>
+          <p>
+            LMS platformalar, multimedia, interaktiv doskalar va onlayn hamkorlik vositalarini
+            dars jarayoniga samarali joriy etish bo‘yicha ilg‘or amaliy ko‘nikmalar.
+          </p>
+        </div>
+        <div class="card-actions">
+          <a class="btn" href="#" aria-label="Raqamli ta’lim vositalari haqida batafsil">Batafsil</a>
+        </div>
+      </article>
+    </section>
+
+    <div id="emptyState" class="empty">Tanlangan filtrlarga mos kurs topilmadi.</div>
   </div>
 
-  <div class="filters">
-    <label for="category">Filter:</label>
-    <select id="category">
-      <option>Barchasi</option>
-      <option>Til o‘qitish</option>
-      <option>Pedagogika</option>
-      <option>Metodika</option>
-    </select>
-  </div>
+  <script>
+    (function() {
+      const grid = document.getElementById('courseGrid');
+      const cards = Array.from(grid.querySelectorAll('.card'));
+      const cat = document.getElementById('f-category');
+      const lvl = document.getElementById('f-level');
+      const count = document.getElementById('resultCount');
+      const empty = document.getElementById('emptyState');
 
-  <div class="course-container">
-    <!-- Kurs 1 -->
-    <div class="course-card">
-      <img src="https://raw.githubusercontent.com/ik3057823-ops/images-5/refs/heads/main/image1.jpg" alt="Kurs 1">
-      <div class="course-content">
-        <h3 class="course-title">Ingliz tilini o‘qitish metodlari</h3>
-        <p class="course-info">
-          Ushbu kurs zamonaviy yondashuvlar orqali ingliz tilini samarali o‘qitish usullarini ko‘rsatadi. 
-          Kurs davomida dars rejalari tuzish, mashqlar tanlash va baholash mezonlari o‘rganiladi.
-        </p>
-      </div>
-    </div>
+      function applyFilters() {
+        const c = cat.value; const l = lvl.value;
+        let visible = 0;
+        cards.forEach(card => {
+          const okC = (c === 'all') || card.dataset.category === c;
+          const okL = (l === 'all') || card.dataset.level === l;
+          const show = okC && okL;
+          card.style.display = show ? '' : 'none';
+          if (show) visible++;
+        });
+        count.textContent = String(visible);
+        empty.style.display = visible ? 'none' : 'block';
+      }
 
-    <!-- Kurs 2 -->
-    <div class="course-card">
-      <img src="https://raw.githubusercontent.com/ik3057823-ops/images-5/refs/heads/main/image1.jpg" alt="Kurs 2">
-      <div class="course-content">
-        <h3 class="course-title">O‘zbek tili va adabiyotini o‘qitish</h3>
-        <p class="course-info">
-          Kurs maktab va oliy ta’limda o‘zbek tili va adabiyotini o‘qitishning nazariy va amaliy 
-          jihatlarini yoritadi. Tinglovchilar yangi metodik vositalar bilan tanishadilar.
-        </p>
-      </div>
-    </div>
-
-    <!-- Kurs 3 -->
-    <div class="course-card">
-      <img src="https://raw.githubusercontent.com/ik3057823-ops/images-5/refs/heads/main/image1.jpg" alt="Kurs 3">
-      <div class="course-content">
-        <h3 class="course-title">Raqamli ta’lim texnologiyalari</h3>
-        <p class="course-info">
-          Bu kurs o‘qituvchilar uchun zamonaviy raqamli texnologiyalarni dars jarayoniga 
-          qo‘shish usullarini ko‘rsatadi. Multimedia, interaktiv vositalar va onlayn platformalar 
-          haqida bilim beriladi.
-        </p>
-      </div>
-    </div>
-  </div>
+      cat.addEventListener('change', applyFilters);
+      lvl.addEventListener('change', applyFilters);
+      // Init
+      applyFilters();
+    })();
+  </script>
 </body>
 </html>
