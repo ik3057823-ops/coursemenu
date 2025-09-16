@@ -10,7 +10,7 @@
       --card: #ffffff;
       --text: #1f2937;
       --muted: #6b7280;
-      --primary: #2563eb;
+      --primary: #13176C; /* Updated button color */
       --border: #e5e7eb;
       --radius: 16px;
     }
@@ -26,19 +26,19 @@
     .container {
       max-width: 1120px;
       margin: 0 auto;
-      padding: 28px 20px 48px;
+      padding: 56px 20px 56px; /* More top padding for space above title */
     }
     header.page-header {
-      text-align: left; /* Title on the left */
-      margin-bottom: 16px;
+      text-align: left;
+      margin-bottom: 0; /* We'll control spacing via page-desc */
     }
     header.page-header h1 {
-      margin: 0 0 8px 0;
+      margin: 0 0 12px 0;
       font-size: clamp(28px, 4vw, 40px);
       letter-spacing: -0.02em;
     }
     .page-desc {
-      margin: 0;
+      margin: 0 0 28px 0; /* Extra space below description */
       color: var(--muted);
       max-width: 70ch;
     }
@@ -50,7 +50,7 @@
       gap: 12px 16px;
       align-items: flex-end;
       padding: 16px;
-      margin: 18px 0 24px;
+      margin: 0 0 28px; /* More breathing room after filters */
       background: var(--card);
       border: 1px solid var(--border);
       border-radius: var(--radius);
@@ -140,7 +140,7 @@
       transition: filter 160ms ease, transform 160ms ease;
     }
     .btn:hover { filter: brightness(1.05); transform: translateY(-1px); }
-    .btn:focus { outline: 3px solid rgba(37,99,235,0.35); outline-offset: 2px; }
+    .btn:focus { outline: 3px solid rgba(19,23,108,0.35); outline-offset: 2px; }
 
     /* Empty state */
     .empty { display:none; text-align:center; color: var(--muted); padding: 28px 12px; }
@@ -157,7 +157,7 @@
       <h1 id="page-title">Kurslar</h1>
       <p class="page-desc">
         Bu sahifa o‘qituvchilar va o‘qitishga qiziquvchilar uchun mo‘ljallangan qisqa kurslar katalogidir.
-        Quyidagi filtrlardan foydalanib, sizga mos yo‘nalish va darajadagi kurslarni tez topishingiz mumkin.
+        Quyidagi filtrlardan foydalanib, sizga mos yo‘nalish va fanlarni tezda topishingiz mumkin.
       </p>
     </header>
 
@@ -173,12 +173,12 @@
         </select>
       </div>
       <div class="filter-group">
-        <label for="f-level">Daraja</label>
-        <select id="f-level" name="level" aria-label="Daraja bo‘yicha filter">
+        <label for="f-subject">Fanlar</label>
+        <select id="f-subject" name="subject" aria-label="Fanlar bo‘yicha filter">
           <option value="all">Barchasi</option>
-          <option value="boshlangich">Boshlang‘ich</option>
-          <option value="orta">O‘rta</option>
-          <option value="ilgor">Ilg‘or</option>
+          <option value="metodika">Metodika</option>
+          <option value="baholash">Baholash</option>
+          <option value="edtech">EdTech</option>
         </select>
       </div>
       <div class="meta" aria-live="polite"><span id="resultCount">3</span> ta kurs topildi</div>
@@ -187,14 +187,14 @@
     <!-- Courses grid -->
     <section class="grid" id="courseGrid" aria-label="Kurs kartalari">
       <!-- Card 1 -->
-      <article class="card" data-category="til" data-level="orta">
+      <article class="card" data-category="til" data-subject="metodika">
         <img class="cover" src="https://raw.githubusercontent.com/ik3057823-ops/images-5/refs/heads/main/image1.jpg" alt="Ingliz tili darsi uchun vizual tasvir" loading="lazy" />
         <div class="card-body">
           <h3>Ingliz tilini o‘qitish metodikasi</h3>
           <div class="meta-row">
             <span class="chip">Yo‘nalish: Til o‘qitish</span>
-            <span class="chip">Daraja: O‘rta</span>
-            <span class="chip">Davomiyligi: 6 hafta</span>
+            <span class="chip">Fan: Metodika</span>
+            <span class="chip">Davomiyligi: 36 soat</span>
           </div>
           <p>
             Zamonaviy yondashuvlar asosida dars rejalash, kommunikativ mashqlar, baholash mezonlari
@@ -207,14 +207,14 @@
       </article>
 
       <!-- Card 2 -->
-      <article class="card" data-category="pedagogika" data-level="boshlangich">
+      <article class="card" data-category="pedagogika" data-subject="baholash">
         <img class="cover" src="https://raw.githubusercontent.com/ik3057823-ops/images-5/refs/heads/main/image2.jpg" alt="Pedagogik materiallar va daftarlar tasviri" loading="lazy" />
         <div class="card-body">
           <h3>Dars dizayni va baholash</h3>
           <div class="meta-row">
             <span class="chip">Yo‘nalish: Pedagogika</span>
-            <span class="chip">Daraja: Boshlang‘ich</span>
-            <span class="chip">Davomiyligi: 4 hafta</span>
+            <span class="chip">Fan: Baholash</span>
+            <span class="chip">Davomiyligi: 24 soat</span>
           </div>
           <p>
             O‘quv maqsadlarini belgilash, kompetensiyaga yo‘naltirilgan dars ssenariylari tuzish
@@ -227,14 +227,14 @@
       </article>
 
       <!-- Card 3 -->
-      <article class="card" data-category="edtech" data-level="ilgor">
+      <article class="card" data-category="edtech" data-subject="edtech">
         <img class="cover" src="https://raw.githubusercontent.com/ik3057823-ops/images-5/refs/heads/main/children-3708586_1280.jpg" alt="Sinfda bolalar bilan interaktiv dars tasviri" loading="lazy" />
         <div class="card-body">
           <h3>Raqamli ta’lim vositalari</h3>
           <div class="meta-row">
             <span class="chip">Yo‘nalish: Raqamli ta’lim</span>
-            <span class="chip">Daraja: Ilg‘or</span>
-            <span class="chip">Davomiyligi: 5 hafta</span>
+            <span class="chip">Fan: EdTech</span>
+            <span class="chip">Davomiyligi: 30 soat</span>
           </div>
           <p>
             LMS platformalar, multimedia, interaktiv doskalar va onlayn hamkorlik vositalarini
@@ -255,17 +255,17 @@
       const grid = document.getElementById('courseGrid');
       const cards = Array.from(grid.querySelectorAll('.card'));
       const cat = document.getElementById('f-category');
-      const lvl = document.getElementById('f-level');
+      const sub = document.getElementById('f-subject');
       const count = document.getElementById('resultCount');
       const empty = document.getElementById('emptyState');
 
       function applyFilters() {
-        const c = cat.value; const l = lvl.value;
+        const c = cat.value; const s = sub.value;
         let visible = 0;
         cards.forEach(card => {
           const okC = (c === 'all') || card.dataset.category === c;
-          const okL = (l === 'all') || card.dataset.level === l;
-          const show = okC && okL;
+          const okS = (s === 'all') || card.dataset.subject === s;
+          const show = okC && okS;
           card.style.display = show ? '' : 'none';
           if (show) visible++;
         });
@@ -274,7 +274,7 @@
       }
 
       cat.addEventListener('change', applyFilters);
-      lvl.addEventListener('change', applyFilters);
+      sub.addEventListener('change', applyFilters);
       // Init
       applyFilters();
     })();
