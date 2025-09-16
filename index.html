@@ -1,283 +1,174 @@
-<!DOCTYPE html>
-<html lang="uz">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Kurslar</title>
+<!-- =============================================
+  WEEBLY-EMBED VERSION (paste into Weebly → Embed Code)
+  - Namespaced under #kurslar-embed to avoid theme conflicts
+  - No <html>, <head>, or <body> tags (Weebly-safe)
+  - Inter typography: Headings (700), Descriptions (400)
+  - Fixed-width cards so filtering NEVER enlarges a single card
+  - Cards are CENTERED under the filters
+============================================== -->
+<div id="kurslar-embed">
   <style>
-    :root {
-      --bg: #f7f7f9;
-      --card: #ffffff;
-      --text: #1f2937;
-      --muted: #6b7280;
-      --primary: #13176C; /* Updated button color */
-      --border: #e5e7eb;
-      --radius: 16px;
-    }
-    * { box-sizing: border-box; }
-    html, body { height: 100%; }
-    body {
-      margin: 0;
-      font-family: system-ui, -apple-system, Segoe UI, Roboto, "Helvetica Neue", Arial, "Noto Sans", "Liberation Sans", sans-serif;
-      color: var(--text);
-      background: var(--bg);
-      line-height: 1.6;
-    }
-    .container {
-      max-width: 1120px;
-      margin: 0 auto;
-      padding: 56px 20px 56px; /* More top padding for space above title */
-    }
-    header.page-header {
-      text-align: left;
-      margin-bottom: 0; /* We'll control spacing via page-desc */
-    }
-    header.page-header h1 {
-      margin: 0 0 12px 0;
-      font-size: clamp(28px, 4vw, 40px);
-      letter-spacing: -0.02em;
-    }
-    .page-desc {
-      margin: 0 0 28px 0; /* Extra space below description */
-      color: var(--muted);
-      max-width: 70ch;
-    }
+    /* Inter font for exact look */
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&display=swap');
+
+    /* Namespace */
+    #kurslar-embed { font-family: "Inter", ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, "Helvetica Neue", Arial, "Noto Sans", "Liberation Sans", sans-serif; color: #1f2937; background: transparent; -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; text-rendering: optimizeLegibility; }
+    #kurslar-embed * { box-sizing: border-box; font-family: inherit; }
+
+    /* Layout */
+    #kurslar-embed .ke-wrap { max-width: 1120px; margin: 0 auto; padding: 56px 16px 48px; }
+
+    /* Headings → Inter Bold */
+    #kurslar-embed .ke-title { margin: 0 0 12px 0; font-size: clamp(28px, 4vw, 40px); line-height: 1.2; letter-spacing: -0.015em; font-weight: 700; }
+    #kurslar-embed .ke-h3 { margin: 0 0 8px 0; font-size: 1.15rem; line-height: 1.3; letter-spacing: -0.01em; font-weight: 700; }
+
+    /* Descriptive text → Inter Regular */
+    #kurslar-embed .ke-desc { margin: 0 0 28px 0; max-width: 70ch; color: #4b5563; font-weight: 400; line-height: 1.6; }
+    #kurslar-embed .ke-p { margin: 0; color: #6b7280; font-weight: 400; line-height: 1.6; }
+
+    /* Labels / chips / meta → Inter Medium */
+    #kurslar-embed .ke-label, #kurslar-embed .ke-chip, #kurslar-embed .ke-meta { font-weight: 500; }
 
     /* Filters */
-    .filters {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 12px 16px;
-      align-items: flex-end;
-      padding: 16px;
-      margin: 0 0 28px; /* More breathing room after filters */
-      background: var(--card);
-      border: 1px solid var(--border);
-      border-radius: var(--radius);
-      box-shadow: 0 1px 2px rgba(0,0,0,0.04);
-    }
-    .filters .filter-group {
-      display: grid;
-      gap: 6px;
-      min-width: 220px;
-    }
-    .filters label {
-      font-size: 0.9rem;
-      color: var(--muted);
-    }
-    .filters select {
-      appearance: none;
-      padding: 10px 12px;
-      border: 1px solid var(--border);
-      border-radius: 10px;
-      background: #fff;
-      font-size: 0.98rem;
-    }
-    .filters .meta {
-      margin-left: auto;
-      font-size: 0.95rem;
-      color: var(--muted);
-      padding-top: 6px;
-    }
+    #kurslar-embed .ke-filters { display: flex; flex-wrap: wrap; gap: 12px 16px; align-items: flex-end; padding: 16px; margin: 0 0 28px 0; background: #ffffff; border: 1px solid #e5e7eb; border-radius: 16px; box-shadow: 0 1px 2px rgba(0,0,0,0.04); }
+    #kurslar-embed .ke-filter-group { display: grid; gap: 6px; min-width: 220px; }
+    #kurslar-embed .ke-select { appearance: none; padding: 10px 12px; border: 1px solid #e5e7eb; border-radius: 10px; background: #fff; font-size: 0.98rem; font: inherit; }
+    #kurslar-embed .ke-meta { margin-left: auto; color: #6b7280; padding-top: 6px; }
 
-    /* Cards */
-    .grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-      gap: 20px;
-    }
-    .card {
-      background: var(--card);
-      border: 1px solid var(--border);
-      border-radius: var(--radius);
-      overflow: hidden;
-      box-shadow: 0 4px 14px rgba(0,0,0,0.06);
-      transition: transform 180ms ease, box-shadow 180ms ease;
-      display: flex;
-      flex-direction: column;
-    }
-    .card:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(0,0,0,0.08); }
-    .cover {
-      width: 100%;
-      aspect-ratio: 16/9;
-      object-fit: cover;
-      background: #ddd;
-      display: block;
-    }
-    .card-body { padding: 16px 16px 12px; }
-    .card h3 { margin: 0 0 8px; font-size: 1.15rem; }
-    .card p { margin: 0; color: var(--muted); }
+    /* GRID: fixed-width cards & CENTERED */
+    #kurslar-embed .ke-grid { display: flex; flex-wrap: wrap; gap: 20px; align-items: stretch; justify-content: center; }
 
-    .meta-row {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 8px;
-      margin: 12px 0 8px;
-    }
-    .chip {
-      font-size: 0.78rem;
-      border: 1px solid var(--border);
-      background: #fafafa;
-      padding: 6px 10px;
-      border-radius: 999px;
-    }
+    /* Card */
+    #kurslar-embed .ke-card { flex: 0 0 320px; width: 320px; max-width: 320px; display: flex; flex-direction: column; background: #ffffff; border: 1px solid #e5e7eb; border-radius: 16px; overflow: hidden; box-shadow: 0 4px 14px rgba(0,0,0,0.06); }
+    #kurslar-embed .ke-card:hover { box-shadow: 0 8px 24px rgba(0,0,0,0.08); }
 
-    .card-actions {
-      display: flex;
-      justify-content: flex-end;
-      padding: 8px 16px 16px;
-      margin-top: auto;
-    }
-    .btn {
-      appearance: none;
-      border: 1px solid var(--primary);
-      background: var(--primary);
-      color: #fff;
-      padding: 10px 14px;
-      border-radius: 10px;
-      font-weight: 600;
-      text-decoration: none;
-      transition: filter 160ms ease, transform 160ms ease;
-    }
-    .btn:hover { filter: brightness(1.05); transform: translateY(-1px); }
-    .btn:focus { outline: 3px solid rgba(19,23,108,0.35); outline-offset: 2px; }
+    #kurslar-embed .ke-cover { width: 100%; aspect-ratio: 16/9; object-fit: cover; display: block; background: #ddd; }
+    #kurslar-embed .ke-body { padding: 16px 16px 12px; }
 
-    /* Empty state */
-    .empty { display:none; text-align:center; color: var(--muted); padding: 28px 12px; }
+    #kurslar-embed .ke-meta-row { display: flex; flex-wrap: wrap; gap: 8px; margin: 12px 0 8px; }
+    #kurslar-embed .ke-chip { font-size: 0.78rem; border: 1px solid #e5e7eb; background: #fafafa; padding: 6px 10px; border-radius: 999px; color: #374151; }
 
-    @media (prefers-reduced-motion: reduce) {
-      .card, .btn { transition: none; }
-    }
+    #kurslar-embed .ke-actions { display: flex; justify-content: flex-end; padding: 8px 16px 16px; margin-top: auto; }
+    #kurslar-embed .ke-btn { appearance: none; border: 1px solid #13176C; background: #13176C; color: #fff; padding: 10px 14px; border-radius: 10px; font-weight: 600; text-decoration: none; font: inherit; }
+    #kurslar-embed .ke-btn:focus { outline: 3px solid rgba(19,23,108,0.35); outline-offset: 2px; }
+
+    #kurslar-embed .ke-empty { display: none; text-align: center; color: #6b7280; padding: 28px 12px; font-weight: 500; }
+
+    @media (max-width: 360px) { #kurslar-embed .ke-card { flex: 1 1 100%; width: 100%; max-width: none; } }
   </style>
-</head>
-<body>
-  <div class="container">
-    <!-- Header -->
-    <header class="page-header" aria-labelledby="page-title">
-      <h1 id="page-title">Kurslar</h1>
-      <p class="page-desc">
-        Bu sahifa o‘qituvchilar va o‘qitishga qiziquvchilar uchun mo‘ljallangan qisqa kurslar katalogidir.
-        Quyidagi filtrlardan foydalanib, sizga mos yo‘nalish va fanlarni tezda topishingiz mumkin.
-      </p>
-    </header>
+
+  <div class="ke-wrap" aria-labelledby="ke-title">
+    <h2 id="ke-title" class="ke-title">Kurslar</h2>
+    <p class="ke-desc">Bu sahifa o‘qituvchilar va o‘qitishga qiziquvchilar uchun mo‘ljallangan qisqa kurslar katalogidir. Quyidagi filtrlardan foydalanib, sizga mos yo‘nalish va fanlarni tezda topishingiz mumkin.</p>
 
     <!-- Filters -->
-    <section class="filters" aria-label="Filterlar">
-      <div class="filter-group">
-        <label for="f-category">Yo‘nalish</label>
-        <select id="f-category" name="category" aria-label="Yo‘nalish bo‘yicha filter">
+    <section class="ke-filters" aria-label="Filterlar">
+      <div class="ke-filter-group">
+        <label class="ke-label" for="ke-category">Yo‘nalish</label>
+        <select class="ke-select" id="ke-category" name="category" aria-label="Yo‘nalish bo‘yicha filter">
           <option value="all">Barchasi</option>
           <option value="til">Til o‘qitish</option>
           <option value="pedagogika">Pedagogika</option>
           <option value="edtech">Raqamli ta’lim (EdTech)</option>
         </select>
       </div>
-      <div class="filter-group">
-        <label for="f-subject">Fanlar</label>
-        <select id="f-subject" name="subject" aria-label="Fanlar bo‘yicha filter">
+      <div class="ke-filter-group">
+        <label class="ke-label" for="ke-subject">Fanlar</label>
+        <select class="ke-select" id="ke-subject" name="subject" aria-label="Fanlar bo‘yicha filter">
           <option value="all">Barchasi</option>
           <option value="metodika">Metodika</option>
           <option value="baholash">Baholash</option>
           <option value="edtech">EdTech</option>
         </select>
       </div>
-      <div class="meta" aria-live="polite"><span id="resultCount">3</span> ta kurs topildi</div>
+      <div class="ke-meta" aria-live="polite"><span id="ke-count">3</span> ta kurs topildi</div>
     </section>
 
-    <!-- Courses grid -->
-    <section class="grid" id="courseGrid" aria-label="Kurs kartalari">
+    <!-- Course cards (centered grid) -->
+    <div class="ke-grid" id="ke-grid" aria-label="Kurs kartalari">
       <!-- Card 1 -->
-      <article class="card" data-category="til" data-subject="metodika">
-        <img class="cover" src="https://raw.githubusercontent.com/ik3057823-ops/images-5/refs/heads/main/image1.jpg" alt="Ingliz tili darsi uchun vizual tasvir" loading="lazy" />
-        <div class="card-body">
-          <h3>Ingliz tilini o‘qitish metodikasi</h3>
-          <div class="meta-row">
-            <span class="chip">Yo‘nalish: Til o‘qitish</span>
-            <span class="chip">Fan: Metodika</span>
-            <span class="chip">Davomiyligi: 36 soat</span>
+      <article class="ke-card" data-category="til" data-subject="metodika">
+        <img class="ke-cover" src="https://raw.githubusercontent.com/ik3057823-ops/images-5/refs/heads/main/image1.jpg" alt="Ingliz tili darsi uchun vizual tasvir" loading="lazy" />
+        <div class="ke-body">
+          <h3 class="ke-h3">Ingliz tilini o‘qitish metodikasi</h3>
+          <div class="ke-meta-row">
+            <span class="ke-chip">Yo‘nalish: Til o‘qitish</span>
+            <span class="ke-chip">Fan: Metodika</span>
+            <span class="ke-chip">Davomiyligi: 36 soat</span>
           </div>
-          <p>
-            Zamonaviy yondashuvlar asosida dars rejalash, kommunikativ mashqlar, baholash mezonlari
-            va differensial yondashuvlarni o‘z ichiga olgan amaliy kurs.
-          </p>
+          <p class="ke-p">Zamonaviy yondashuvlar asosida dars rejalash, kommunikativ mashqlar, baholash mezonlari va differensial yondashuvlarni o‘z ichiga olgan amaliy kurs.</p>
         </div>
-        <div class="card-actions">
-          <a class="btn" href="#" aria-label="Ingliz tilini o‘qitish metodikasi haqida batafsil">Batafsil</a>
+        <div class="ke-actions">
+          <a class="ke-btn" href="https://t4uzb.weebly.com/kurs.html" aria-label="Ingliz tilini o‘qitish metodikasi haqida batafsil sahifasiga o‘tish">Batafsil</a>
         </div>
       </article>
 
       <!-- Card 2 -->
-      <article class="card" data-category="pedagogika" data-subject="baholash">
-        <img class="cover" src="https://raw.githubusercontent.com/ik3057823-ops/images-5/refs/heads/main/image2.jpg" alt="Pedagogik materiallar va daftarlar tasviri" loading="lazy" />
-        <div class="card-body">
-          <h3>Dars dizayni va baholash</h3>
-          <div class="meta-row">
-            <span class="chip">Yo‘nalish: Pedagogika</span>
-            <span class="chip">Fan: Baholash</span>
-            <span class="chip">Davomiyligi: 24 soat</span>
+      <article class="ke-card" data-category="pedagogika" data-subject="baholash">
+        <img class="ke-cover" src="https://raw.githubusercontent.com/ik3057823-ops/images-5/refs/heads/main/image2.jpg" alt="Pedagogik materiallar va daftarlar tasviri" loading="lazy" />
+        <div class="ke-body">
+          <h3 class="ke-h3">Dars dizayni va baholash</h3>
+          <div class="ke-meta-row">
+            <span class="ke-chip">Yo‘nalish: Pedagogika</span>
+            <span class="ke-chip">Fan: Baholash</span>
+            <span class="ke-chip">Davomiyligi: 24 soat</span>
           </div>
-          <p>
-            O‘quv maqsadlarini belgilash, kompetensiyaga yo‘naltirilgan dars ssenariylari tuzish
-            va formatif/summativ baholash usullarini bosqichma-bosqich o‘rgatadi.
-          </p>
+          <p class="ke-p">O‘quv maqsadlarini belgilash, kompetensiyaga yo‘naltirilgan dars ssenariylari tuzish va formatif/summativ baholash usullarini bosqichma-bosqich o‘rgatadi.</p>
         </div>
-        <div class="card-actions">
-          <a class="btn" href="#" aria-label="Dars dizayni va baholash haqida batafsil">Batafsil</a>
+        <div class="ke-actions">
+          <a class="ke-btn" href="https://t4uzb.weebly.com/kurs.html" aria-label="Dars dizayni va baholash haqida batafsil sahifasiga o‘tish">Batafsil</a>
         </div>
       </article>
 
       <!-- Card 3 -->
-      <article class="card" data-category="edtech" data-subject="edtech">
-        <img class="cover" src="https://raw.githubusercontent.com/ik3057823-ops/images-5/refs/heads/main/children-3708586_1280.jpg" alt="Sinfda bolalar bilan interaktiv dars tasviri" loading="lazy" />
-        <div class="card-body">
-          <h3>Raqamli ta’lim vositalari</h3>
-          <div class="meta-row">
-            <span class="chip">Yo‘nalish: Raqamli ta’lim</span>
-            <span class="chip">Fan: EdTech</span>
-            <span class="chip">Davomiyligi: 30 soat</span>
+      <article class="ke-card" data-category="edtech" data-subject="edtech">
+        <img class="ke-cover" src="https://raw.githubusercontent.com/ik3057823-ops/images-5/refs/heads/main/children-3708586_1280.jpg" alt="Sinfda bolalar bilan interaktiv dars tasviri" loading="lazy" />
+        <div class="ke-body">
+          <h3 class="ke-h3">Raqamli ta’lim vositalari</h3>
+          <div class="ke-meta-row">
+            <span class="ke-chip">Yo‘nalish: Raqamli ta’lim</span>
+            <span class="ke-chip">Fan: EdTech</span>
+            <span class="ke-chip">Davomiyligi: 30 soat</span>
           </div>
-          <p>
-            LMS platformalar, multimedia, interaktiv doskalar va onlayn hamkorlik vositalarini
-            dars jarayoniga samarali joriy etish bo‘yicha ilg‘or amaliy ko‘nikmalar.
-          </p>
+          <p class="ke-p">LMS platformalar, multimedia, interaktiv doskalar va onlayn hamkorlik vositalarini dars jarayoniga samarali joriy etish bo‘yicha ilg‘or amaliy ko‘nikmalar.</p>
         </div>
-        <div class="card-actions">
-          <a class="btn" href="#" aria-label="Raqamli ta’lim vositalari haqida batafsil">Batafsil</a>
+        <div class="ke-actions">
+          <a class="ke-btn" href="https://t4uzb.weebly.com/kurs.html" aria-label="Raqamli ta’lim vositalari haqida batafsil sahifasiga o‘tish">Batafsil</a>
         </div>
       </article>
-    </section>
+    </div>
 
-    <div id="emptyState" class="empty">Tanlangan filtrlarga mos kurs topilmadi.</div>
+    <div id="ke-empty" class="ke-empty">Tanlangan filtrlarga mos kurs topilmadi.</div>
   </div>
 
   <script>
-    (function() {
-      const grid = document.getElementById('courseGrid');
-      const cards = Array.from(grid.querySelectorAll('.card'));
-      const cat = document.getElementById('f-category');
-      const sub = document.getElementById('f-subject');
-      const count = document.getElementById('resultCount');
-      const empty = document.getElementById('emptyState');
+    (function(){
+      var root = document.getElementById('kurslar-embed');
+      if (!root) return;
+      var grid = root.querySelector('#ke-grid');
+      var cards = Array.prototype.slice.call(grid.querySelectorAll('.ke-card'));
+      var cat = root.querySelector('#ke-category');
+      var sub = root.querySelector('#ke-subject');
+      var count = root.querySelector('#ke-count');
+      var empty = root.querySelector('#ke-empty');
 
-      function applyFilters() {
-        const c = cat.value; const s = sub.value;
-        let visible = 0;
-        cards.forEach(card => {
-          const okC = (c === 'all') || card.dataset.category === c;
-          const okS = (s === 'all') || card.dataset.subject === s;
-          const show = okC && okS;
+      function applyFilters(){
+        var c = cat.value; var s = sub.value; var visible = 0;
+        for (var i=0; i<cards.length; i++){
+          var card = cards[i];
+          var okC = (c === 'all') || (card.getAttribute('data-category') === c);
+          var okS = (s === 'all') || (card.getAttribute('data-subject') === s);
+          var show = okC && okS;
           card.style.display = show ? '' : 'none';
           if (show) visible++;
-        });
+        }
         count.textContent = String(visible);
         empty.style.display = visible ? 'none' : 'block';
       }
 
       cat.addEventListener('change', applyFilters);
       sub.addEventListener('change', applyFilters);
-      // Init
       applyFilters();
     })();
   </script>
-</body>
-</html>
+</div>
