@@ -3,6 +3,7 @@
   - Namespaced under #kurslar-embed to avoid theme conflicts
   - No <html>, <head>, or <body> tags (Weebly-safe)
   - Inter typography: Headings (700), Descriptions (400)
+  - FIX: Center page title + description
   - Fixed-width cards so filtering NEVER enlarges a single card
   - Cards are CENTERED under the filters
 ============================================== -->
@@ -18,12 +19,12 @@
     /* Layout */
     #kurslar-embed .ke-wrap { max-width: 1120px; margin: 0 auto; padding: 56px 16px 48px; }
 
-    /* Headings → Inter Bold */
-    #kurslar-embed .ke-title { margin: 0 0 12px 0; font-size: clamp(28px, 4vw, 40px); line-height: 1.2; letter-spacing: -0.015em; font-weight: 700; }
+    /* Headings → Inter Bold (CENTERED) */
+    #kurslar-embed .ke-title { margin: 0 0 12px 0; font-size: clamp(28px, 4vw, 40px); line-height: 1.2; letter-spacing: -0.015em; font-weight: 700; text-align: center; }
     #kurslar-embed .ke-h3 { margin: 0 0 8px 0; font-size: 1.15rem; line-height: 1.3; letter-spacing: -0.01em; font-weight: 700; }
 
-    /* Descriptive text → Inter Regular */
-    #kurslar-embed .ke-desc { margin: 0 0 28px 0; max-width: 70ch; color: #4b5563; font-weight: 400; line-height: 1.6; }
+    /* Descriptive text → Inter Regular (CENTERED) */
+    #kurslar-embed .ke-desc { margin: 0 auto 28px auto; max-width: 70ch; color: #4b5563; font-weight: 400; line-height: 1.6; text-align: center; }
     #kurslar-embed .ke-p { margin: 0; color: #6b7280; font-weight: 400; line-height: 1.6; }
 
     /* Labels / chips / meta → Inter Medium */
@@ -91,7 +92,7 @@
         <img class="ke-cover" src="https://raw.githubusercontent.com/ik3057823-ops/images-5/refs/heads/main/image1.jpg" alt="Ingliz tili darsi uchun vizual tasvir" loading="lazy" />
         <div class="ke-body">
           <h3 class="ke-h3">Ingliz tilini o‘qitish metodikasi</h3>
-          <div class="ke-meta-row">
+        <div class="ke-meta-row">
             <span class="ke-chip">Yo‘nalish: Til o‘qitish</span>
             <span class="ke-chip">Fan: Metodika</span>
             <span class="ke-chip">Davomiyligi: 36 soat</span>
