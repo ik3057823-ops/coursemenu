@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+  <meta charset="UTF-8">
+  <title>Kurslar</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 20px;
+      background: #f9f9f9;
+    }
+
+    .header {
+      text-align: right;
+      margin-bottom: 20px;
+    }
+
+    .header h1 {
+      font-size: 2em;
+      margin: 0;
+      color: #333;
+    }
+
+    .filters {
+      text-align: right;
+      margin-bottom: 30px;
+    }
+
+    .filters select {
+      padding: 8px;
+      font-size: 1em;
+    }
+
+    .course-container {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 20px;
+    }
+
+    .course-card {
+      background: #fff;
+      border-radius: 10px;
+      overflow: hidden;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+      transition: transform 0.2s ease;
+    }
+
+    .course-card:hover {
+      transform: scale(1.02);
+    }
+
+    .course-card img {
+      width: 100%;
+      height: 160px;
+      object-fit: cover;
+    }
+
+    .course-content {
+      padding: 15px;
+    }
+
+    .course-title {
+      font-size: 1.2em;
+      margin: 0 0 10px;
+      color: #222;
+    }
+
+    .course-info {
+      font-size: 0.95em;
+      color: #555;
+      line-height: 1.5;
+    }
+  </style>
+</head>
+<body>
+  <div class="header">
+    <h1>Kurslar</h1>
+  </div>
+
+  <div class="filters">
+    <label for="category">Filter:</label>
+    <select id="category">
+      <option>Barchasi</option>
+      <option>Til o‘qitish</option>
+      <option>Pedagogika</option>
+      <option>Metodika</option>
+    </select>
+  </div>
+
+  <div class="course-container">
+    <!-- Kurs 1 -->
+    <div class="course-card">
+      <img src="https://raw.githubusercontent.com/ik3057823-ops/images-5/refs/heads/main/image1.jpg" alt="Kurs 1">
+      <div class="course-content">
+        <h3 class="course-title">Ingliz tilini o‘qitish metodlari</h3>
+        <p class="course-info">
+          Ushbu kurs zamonaviy yondashuvlar orqali ingliz tilini samarali o‘qitish usullarini ko‘rsatadi. 
+          Kurs davomida dars rejalari tuzish, mashqlar tanlash va baholash mezonlari o‘rganiladi.
+        </p>
+      </div>
+    </div>
+
+    <!-- Kurs 2 -->
+    <div class="course-card">
+      <img src="https://raw.githubusercontent.com/ik3057823-ops/images-5/refs/heads/main/image1.jpg" alt="Kurs 2">
+      <div class="course-content">
+        <h3 class="course-title">O‘zbek tili va adabiyotini o‘qitish</h3>
+        <p class="course-info">
+          Kurs maktab va oliy ta’limda o‘zbek tili va adabiyotini o‘qitishning nazariy va amaliy 
+          jihatlarini yoritadi. Tinglovchilar yangi metodik vositalar bilan tanishadilar.
+        </p>
+      </div>
+    </div>
+
+    <!-- Kurs 3 -->
+    <div class="course-card">
+      <img src="https://raw.githubusercontent.com/ik3057823-ops/images-5/refs/heads/main/image1.jpg" alt="Kurs 3">
+      <div class="course-content">
+        <h3 class="course-title">Raqamli ta’lim texnologiyalari</h3>
+        <p class="course-info">
+          Bu kurs o‘qituvchilar uchun zamonaviy raqamli texnologiyalarni dars jarayoniga 
+          qo‘shish usullarini ko‘rsatadi. Multimedia, interaktiv vositalar va onlayn platformalar 
+          haqida bilim beriladi.
+        </p>
+      </div>
+    </div>
+  </div>
+</body>
+</html>
